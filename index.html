@@ -463,6 +463,157 @@
       outline: none;
     }
 
+    .language-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, #050505 0 7%, #f4f4f4 7% 72%, #050505 72% 100%);
+      color: #151515;
+      transition: opacity .75s ease, visibility .75s ease, transform .75s ease;
+    }
+
+    .language-gate.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(1.03);
+      pointer-events: none;
+    }
+
+    .gate-stage {
+      position: relative;
+      width: min(100%, 430px);
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .gate-kicker {
+      margin: 0 0 24px;
+      font-size: 32px;
+      font-weight: 650;
+      letter-spacing: 0;
+    }
+
+    .gate-title {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: #111;
+      font-size: clamp(86px, 27vw, 146px);
+      line-height: .72;
+      font-weight: 950;
+      letter-spacing: 0;
+      text-align: center;
+      filter: blur(.2px);
+    }
+
+    .gate-title::after {
+      content: "DULLE";
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translateX(-50%);
+      color: rgba(0, 0, 0, .42);
+      filter: blur(13px);
+      z-index: -1;
+    }
+
+    .gate-glass {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      bottom: 38px;
+      min-height: 190px;
+      padding: 38px 22px 24px;
+      border: 1px solid rgba(255, 255, 255, .44);
+      border-radius: 30px 30px 8px 8px;
+      background: rgba(160, 160, 160, .66);
+      box-shadow: 0 -22px 44px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .28);
+      backdrop-filter: blur(19px) saturate(80%);
+      text-align: center;
+    }
+
+    .gate-subtitle {
+      margin: 0 0 18px;
+      color: rgba(0, 0, 0, .78);
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .language-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .language-button {
+      min-height: 48px;
+      border: 1px solid rgba(0, 0, 0, .2);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .72);
+      color: #111;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .language-button:focus,
+    .language-button:hover {
+      outline: none;
+      background: #111;
+      color: #fff;
+    }
+
+    .gate-loader {
+      width: 92px;
+      height: 3px;
+      margin: 20px auto 0;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, .16);
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+
+    .language-gate.is-loading .gate-loader { opacity: 1; }
+
+    .gate-loader span {
+      display: block;
+      width: 44%;
+      height: 100%;
+      border-radius: inherit;
+      background: #111;
+      animation: gateLoad 1s ease-in-out infinite;
+    }
+
+    .app {
+      transition: opacity .65s ease, filter .65s ease, transform .65s ease;
+    }
+
+    .app.is-loading {
+      opacity: 0;
+      filter: blur(14px) grayscale(1);
+      transform: translateY(16px);
+      pointer-events: none;
+    }
+
+    body.is-locked {
+      overflow: hidden;
+    }
+
+    @keyframes gateLoad {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(230%); }
+    }
+
     @media (min-width: 481px) {
       body { padding: 20px 0; }
       .app { border-radius: 18px; }
@@ -470,8 +621,23 @@
     }
   </style>
 </head>
-<body>
-  <div class="app">
+<body class="is-locked">
+  <section class="language-gate" aria-label="언어 선택 화면">
+    <div class="gate-stage">
+      <p class="gate-kicker">Seoul Trail</p>
+      <h2 class="gate-title">DULLE<br>GIL</h2>
+      <div class="gate-glass">
+        <p class="gate-subtitle">Choose your language</p>
+        <div class="language-actions" aria-label="Language options">
+          <button type="button" class="language-button" data-lang="ko">한국어</button>
+          <button type="button" class="language-button" data-lang="en">English</button>
+        </div>
+        <div class="gate-loader" aria-hidden="true"><span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="app is-loading">
     <header class="hero" id="top">
       <div class="topbar">
         <div class="brand">SEOUL TRAIL</div>
@@ -595,3 +761,5 @@
   </div>
 </body>
 </html>
+
+
