@@ -84,7 +84,26 @@
       text-shadow: 0 1px 8px rgba(0, 0, 0, .28);
     }
 
-    .brand { font-size: 14px; font-weight: 800; }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: 8px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .brand-logo {
+      width: 22px;
+      height: 22px;
+      display: block;
+      object-fit: contain;
+      border-radius: 3px;
+    }
+
+    .brand-text {
+      transform: translateX(2px);
+    }
 
     .pill {
       border: 1px solid rgba(255, 255, 255, .34);
@@ -497,7 +516,7 @@
 
     .gate-glass {
       width: min(100%, 330px);
-      padding: 10px 12px;
+      padding: 18px 12px;
       border-radius: 28px;
       background: rgba(214, 214, 214, .68);
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
@@ -512,7 +531,7 @@
 
     .language-gate.is-open .gate-glass {
       width: min(100%, 330px);
-      padding: 10px 12px;
+      padding: 18px 12px 14px;
     }
 
     .language-trigger {
@@ -681,7 +700,10 @@
   <div class="app is-loading">
     <header class="hero" id="top">
       <div class="topbar">
-        <div class="brand">SEOUL TRAIL</div>
+        <div class="brand">
+          <img class="brand-logo" src="assets/seoul-trail-logo.png" alt="" aria-hidden="true">
+          <span class="brand-text">SEOUL TRAIL</span>
+        </div>
         <div class="pill">모바일 안내</div>
       </div>
       <div class="hero-copy">
@@ -802,3 +824,4 @@
   </div>
 </body>
 </html>
+
