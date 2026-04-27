@@ -1,0 +1,597 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>서울둘레길 모바일 안내</title>
+  <link rel="preload" as="image" href="assets/seoul-dullegil-hero.png">
+  <script src="script.js" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f4ec;
+      --ink: #17201b;
+      --muted: #667067;
+      --green: #176c43;
+      --leaf: #d9ead7;
+      --orange: #e36f2d;
+      --blue: #2d6f91;
+      --line: rgba(23, 32, 27, .12);
+      --card: rgba(255, 255, 255, .86);
+      --shadow: 0 18px 44px rgba(29, 55, 39, .14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    a { color: inherit; }
+
+    .app {
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #fffaf0 0%, #f7f4ec 38%, #eef5ed 100%);
+      box-shadow: 0 0 0 1px rgba(23, 32, 27, .05);
+      overflow: hidden;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 560px;
+      padding: 20px 18px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(12, 34, 25, .12) 0%, rgba(12, 34, 25, .18) 38%, rgba(10, 25, 18, .86) 100%),
+        url("assets/seoul-dullegil-hero.png") center / cover;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 120px;
+      background: linear-gradient(180deg, rgba(247, 244, 236, 0), var(--bg));
+      z-index: -1;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+      text-shadow: 0 1px 8px rgba(0, 0, 0, .28);
+    }
+
+    .brand { font-size: 14px; font-weight: 800; }
+
+    .pill {
+      border: 1px solid rgba(255, 255, 255, .34);
+      border-radius: 999px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, .16);
+      backdrop-filter: blur(14px);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .hero-copy {
+      color: #fff;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, .4);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      color: #f9d17a;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 13vw, 60px);
+      line-height: .96;
+      font-weight: 900;
+    }
+
+    .lead {
+      max-width: 360px;
+      margin: 14px 0 0;
+      color: rgba(255, 255, 255, .88);
+      font-size: 16px;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 22px 0 0;
+    }
+
+    .stat {
+      min-height: 84px;
+      padding: 14px 10px;
+      border: 1px solid rgba(255, 255, 255, .22);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .14);
+      backdrop-filter: blur(18px);
+    }
+
+    .stat strong {
+      display: block;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: rgba(255, 255, 255, .78);
+      font-size: 11px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    main { padding: 20px 16px 92px; }
+    section { margin: 26px 0; scroll-margin-top: 18px; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    h2 { margin: 0; font-size: 24px; line-height: 1.16; }
+
+    .hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .summary-item {
+      min-height: 126px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .78);
+    }
+
+    .summary-item b {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--green);
+      font-size: 13px;
+    }
+
+    .summary-item p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.45;
+      font-weight: 800;
+    }
+
+    .route-map {
+      position: relative;
+      min-height: 250px;
+      padding: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(227, 111, 45, .24), transparent 22%),
+        radial-gradient(circle at 86% 28%, rgba(45, 111, 145, .22), transparent 24%),
+        linear-gradient(135deg, #fbf5e4, #dcebdc);
+    }
+
+    .loop {
+      position: absolute;
+      inset: 38px 32px 34px;
+      border: 12px solid rgba(23, 108, 67, .82);
+      border-left-color: rgba(227, 111, 45, .86);
+      border-bottom-color: rgba(45, 111, 145, .76);
+      border-radius: 48% 42% 46% 52%;
+      transform: rotate(-11deg);
+    }
+
+    .map-label {
+      position: relative;
+      z-index: 1;
+      max-width: 188px;
+      padding: 14px;
+      background: rgba(255, 255, 255, .88);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .map-label strong { display: block; font-size: 17px; line-height: 1.25; }
+
+    .map-label span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .marker {
+      position: absolute;
+      z-index: 1;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--green);
+      color: var(--green);
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(23, 32, 27, .16);
+    }
+
+    .marker.one { right: 64px; top: 54px; }
+    .marker.two { right: 48px; bottom: 58px; border-color: var(--blue); color: var(--blue); }
+    .marker.three { left: 52px; bottom: 44px; border-color: var(--orange); color: var(--orange); }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      padding: 2px 0 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .chips::-webkit-scrollbar { display: none; }
+
+    .chip {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: rgba(255, 255, 255, .76);
+      color: var(--muted);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .chip.active {
+      border-color: var(--green);
+      background: var(--green);
+      color: #fff;
+    }
+
+    .course-list { display: grid; gap: 10px; }
+
+    .course {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .86);
+    }
+
+    .course.hide { display: none; }
+
+    .num {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--leaf);
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .course h3 { margin: 0; font-size: 17px; line-height: 1.28; }
+
+    .course p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.42;
+      font-weight: 650;
+    }
+
+    .level {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 10px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: #f2f0e8;
+      color: #4e584f;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .level.beginner { background: #e1f0d8; color: #236224; }
+    .level.middle { background: #e7f0f5; color: #225b78; }
+    .level.hard { background: #f9e1d3; color: #a44518; }
+
+    .steps { display: grid; gap: 10px; }
+
+    .step {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .8);
+    }
+
+    .step b {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+    }
+
+    .step strong { display: block; font-size: 15px; }
+
+    .step span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .checklist { display: grid; gap: 8px; padding: 14px; }
+
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      color: #2e3830;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    .check input { width: 22px; height: 22px; accent-color: var(--green); }
+
+    .cta { display: grid; gap: 10px; }
+
+    .button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      border-radius: 8px;
+      background: var(--green);
+      color: #fff;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .button.secondary {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .78);
+      color: var(--ink);
+    }
+
+    .source {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      z-index: 10;
+      width: min(calc(100% - 24px), 456px);
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      padding: 6px;
+      border: 1px solid rgba(23, 32, 27, .12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .92);
+      box-shadow: 0 14px 38px rgba(23, 32, 27, .18);
+      backdrop-filter: blur(18px);
+    }
+
+    .bottom-nav a {
+      min-height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .bottom-nav a.active,
+    .bottom-nav a:focus,
+    .bottom-nav a:hover {
+      background: var(--leaf);
+      color: var(--green);
+      outline: none;
+    }
+
+    @media (min-width: 481px) {
+      body { padding: 20px 0; }
+      .app { border-radius: 18px; }
+      .bottom-nav { bottom: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="hero" id="top">
+      <div class="topbar">
+        <div class="brand">SEOUL TRAIL</div>
+        <div class="pill">모바일 안내</div>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">서울 외곽을 한 바퀴 걷는 도시 트레킹</p>
+        <h1>서울<br>둘레길</h1>
+        <p class="lead">산, 하천, 마을길을 이어 서울의 자연과 역사, 일상 풍경을 천천히 만나는 21개 코스 안내.</p>
+        <div class="quick-stats" aria-label="서울둘레길 핵심 정보">
+          <div class="stat"><strong>21</strong><span>개 코스</span></div>
+          <div class="stat"><strong>156.5</strong><span>km 총연장</span></div>
+          <div class="stat"><strong>2-4</strong><span>시간 권장</span></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="overview">
+        <div class="section-head">
+          <h2>한눈에 보기</h2>
+          <p class="hint">2024.04.30 개편 기준</p>
+        </div>
+        <div class="summary">
+          <article class="summary-item"><b>접근</b><p>지하철역과 가까운 기점이 많아 대중교통으로 시작하기 좋습니다.</p></article>
+          <article class="summary-item"><b>길의 성격</b><p>외곽산, 하천, 마을길을 연결한 순환형 도보길입니다.</p></article>
+          <article class="summary-item"><b>난이도</b><p>초급 7개, 중급 10개, 상급 4개 코스로 나뉩니다.</p></article>
+          <article class="summary-item"><b>인증</b><p>스탬프북 또는 모바일 앱으로 완주 인증에 도전할 수 있습니다.</p></article>
+        </div>
+      </section>
+
+      <section id="map">
+        <div class="section-head">
+          <h2>순환 코스</h2>
+          <p class="hint">서울을 감싸는 큰 고리</p>
+        </div>
+        <div class="panel route-map" aria-label="서울둘레길 순환형 코스 일러스트">
+          <div class="loop" aria-hidden="true"></div>
+          <div class="map-label"><strong>도봉산역에서 다시 도봉산역으로</strong><span>북한산, 관악산, 안양천, 한강 변을 지나며 이어집니다.</span></div>
+          <div class="marker one">산</div>
+          <div class="marker two">강</div>
+          <div class="marker three">숲</div>
+        </div>
+      </section>
+
+      <section id="courses">
+        <div class="section-head">
+          <h2>코스 목록</h2>
+          <p class="hint">난이도별 필터</p>
+        </div>
+        <div class="chips" role="tablist" aria-label="코스 난이도 필터">
+          <button class="chip active" type="button" data-filter="all" aria-selected="true">전체</button>
+          <button class="chip" type="button" data-filter="beginner" aria-selected="false">초급</button>
+          <button class="chip" type="button" data-filter="middle" aria-selected="false">중급</button>
+          <button class="chip" type="button" data-filter="hard" aria-selected="false">상급</button>
+        </div>
+        <div class="course-list">
+          <article class="course" data-level="hard"><div class="num">1</div><div><h3>수락산</h3><p>도봉산역 ~ 당고개공원 갈림길</p><span class="level hard">상급</span></div></article>
+          <article class="course" data-level="hard"><div class="num">2</div><div><h3>덕릉고개</h3><p>당고개공원 갈림길 ~ 상계동 나들이철쭉동산</p><span class="level hard">상급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">3</div><div><h3>불암산</h3><p>상계동 나들이철쭉동산 ~ 화랑대역</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="beginner"><div class="num">4</div><div><h3>망우·용마산</h3><p>화랑대역 ~ 깔딱고개 쉼터</p><span class="level beginner">초급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">5</div><div><h3>아차산</h3><p>깔딱고개 쉼터 ~ 광나루역</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="beginner"><div class="num">6</div><div><h3>고덕산</h3><p>광나루역 ~ 명일근린공원</p><span class="level beginner">초급</span></div></article>
+          <article class="course" data-level="beginner"><div class="num">7</div><div><h3>일자산</h3><p>명일근린공원 ~ 오금1교</p><span class="level beginner">초급</span></div></article>
+          <article class="course" data-level="beginner"><div class="num">8</div><div><h3>장지·탄천</h3><p>오금1교 ~ 수서역</p><span class="level beginner">초급</span></div></article>
+          <article class="course" data-level="hard"><div class="num">9</div><div><h3>대모·구룡산</h3><p>수서역 ~ 매헌시민의숲</p><span class="level hard">상급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">10</div><div><h3>우면산</h3><p>매헌시민의숲 ~ 사당역</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">11</div><div><h3>관악산</h3><p>사당역 ~ 관악산역</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">12</div><div><h3>호암산</h3><p>관악산역 ~ 석수역</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="beginner"><div class="num">13</div><div><h3>안양천 상류</h3><p>석수역 ~ 구일역</p><span class="level beginner">초급</span></div></article>
+          <article class="course" data-level="beginner"><div class="num">14</div><div><h3>안양천 하류</h3><p>구일역 ~ 가양역</p><span class="level beginner">초급</span></div></article>
+          <article class="course" data-level="beginner"><div class="num">15</div><div><h3>노을·하늘공원</h3><p>가양대교 남단 ~ 증산역</p><span class="level beginner">초급</span></div></article>
+          <article class="course" data-level="hard"><div class="num">16</div><div><h3>봉산·앵봉산</h3><p>증산역 ~ 구파발역</p><span class="level hard">상급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">17</div><div><h3>북한산 은평</h3><p>구파발역 ~ 북한산생태공원</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">18</div><div><h3>북한산 종로</h3><p>북한산생태공원 ~ 형제봉 입구</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">19</div><div><h3>북한산 성북</h3><p>형제봉 입구 ~ 화계사 입구</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">20</div><div><h3>북한산 강북</h3><p>화계사 입구 ~ 북한산우이역</p><span class="level middle">중급</span></div></article>
+          <article class="course" data-level="middle"><div class="num">21</div><div><h3>북한산 도봉</h3><p>북한산우이역 ~ 도봉산역</p><span class="level middle">중급</span></div></article>
+        </div>
+      </section>
+
+      <section id="stamp">
+        <div class="section-head">
+          <h2>완주 인증</h2>
+          <p class="hint">스탬프를 모으는 방식</p>
+        </div>
+        <div class="steps">
+          <article class="step"><b>1</b><div><strong>코스 선택</strong><span>거리와 난이도를 확인하고 한 번에 무리하지 않는 코스로 시작합니다.</span></div></article>
+          <article class="step"><b>2</b><div><strong>스탬프 인증</strong><span>스탬프북 또는 모바일 스탬프여권, 트랭글, 램블러 앱을 활용합니다.</span></div></article>
+          <article class="step"><b>3</b><div><strong>완주 인증서</strong><span>21개 코스 완주 후 서울둘레길 안내센터에 신청할 수 있습니다.</span></div></article>
+        </div>
+      </section>
+
+      <section id="ready">
+        <div class="section-head">
+          <h2>출발 전 체크</h2>
+          <p class="hint">현장에서 바로 확인</p>
+        </div>
+        <div class="panel checklist">
+          <label class="check"><input type="checkbox"> 날씨와 일몰 시간 확인</label>
+          <label class="check"><input type="checkbox"> 물, 간식, 외투 준비</label>
+          <label class="check"><input type="checkbox"> 휴대폰 충전과 보조배터리</label>
+          <label class="check"><input type="checkbox"> 코스 시작·종점 교통편 확인</label>
+          <label class="check"><input type="checkbox"> 쓰레기 되가져가기</label>
+        </div>
+      </section>
+
+      <section class="cta" aria-label="공식 자료 링크">
+        <a class="button" href="https://gil.seoul.go.kr" target="_blank" rel="noreferrer">공식 누리집 보기</a>
+        <a class="button secondary" href="https://map.seoul.go.kr" target="_blank" rel="noreferrer">스마트서울맵 열기</a>
+        <p class="source">정보 출처: 서울둘레길 공식 누리집의 소개, 전체 코스, 완주 인증서, 안전 길잡이 페이지를 기준으로 구성했습니다.</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="빠른 이동">
+      <a href="#overview">요약</a>
+      <a href="#courses">코스</a>
+      <a href="#stamp">인증</a>
+      <a href="#ready">준비</a>
+    </nav>
+  </div>
+</body>
+</html>
