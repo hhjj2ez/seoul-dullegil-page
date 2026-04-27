@@ -162,19 +162,37 @@ const setLanguage = (lang) => {
   setTexts(".bottom-nav a", t.nav, (node, value) => { node.textContent = value; });
 };
 
-languageButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    const lang = button.dataset.lang;
-    gate.classList.add("is-loading");
-    setLanguage(lang);
-    window.scrollTo({ top: 0, behavior: "auto" });
+let languageSelected = false;
 
-    setTimeout(() => {
-      gate.classList.add("is-hidden");
-      app.classList.remove("is-loading");
-      document.body.classList.remove("is-locked");
-      activateNav();
-    }, 850);
+const enterApp = (lang) => {
+  if (languageSelected || !copy[lang]) return;
+
+  languageSelected = true;
+  gate.classList.add("is-loading");
+  setLanguage(lang);
+  window.scrollTo({ top: 0, behavior: "auto" });
+
+  setTimeout(() => {
+    gate.classList.add("is-hidden");
+    app.classList.remove("is-loading");
+    document.body.classList.remove("is-locked");
+    activateNav();
+  }, 850);
+};
+
+languageButtons.forEach((button) => {
+  const handleLanguageSelect = (event) => {
+    event.preventDefault();
+    enterApp(button.dataset.lang);
+  };
+
+  button.addEventListener("pointerup", handleLanguageSelect);
+  button.addEventListener("touchend", handleLanguageSelect, { passive: false });
+  button.addEventListener("click", handleLanguageSelect);
+  button.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      handleLanguageSelect(event);
+    }
   });
 });
 
