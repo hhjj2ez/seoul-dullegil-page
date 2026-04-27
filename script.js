@@ -3,6 +3,7 @@ const courses = document.querySelectorAll(".course");
 const navLinks = document.querySelectorAll(".bottom-nav a");
 const gate = document.querySelector(".language-gate");
 const app = document.querySelector(".app");
+const languageTrigger = document.querySelector(".language-trigger");
 const languageButtons = document.querySelectorAll(".language-button");
 
 const courseData = {
@@ -164,6 +165,12 @@ const setLanguage = (lang) => {
 
 let languageSelected = false;
 
+const openLanguageList = (event) => {
+  event.preventDefault();
+  gate.classList.add("is-open");
+  languageTrigger.setAttribute("aria-expanded", "true");
+};
+
 const enterApp = (lang) => {
   if (languageSelected || !copy[lang]) return;
 
@@ -179,6 +186,15 @@ const enterApp = (lang) => {
     activateNav();
   }, 850);
 };
+
+languageTrigger.addEventListener("pointerup", openLanguageList);
+languageTrigger.addEventListener("touchend", openLanguageList, { passive: false });
+languageTrigger.addEventListener("click", openLanguageList);
+languageTrigger.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    openLanguageList(event);
+  }
+});
 
 languageButtons.forEach((button) => {
   const handleLanguageSelect = (event) => {

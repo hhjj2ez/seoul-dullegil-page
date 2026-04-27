@@ -469,100 +469,112 @@
       z-index: 50;
       display: grid;
       place-items: center;
-      padding: 24px;
-      background:
-        linear-gradient(180deg, #050505 0 7%, #f4f4f4 7% 72%, #050505 72% 100%);
+      width: min(100%, 480px);
+      margin: 0 auto;
+      padding: 44px 24px;
+      background: rgba(164, 164, 164, .82);
       color: #151515;
+      backdrop-filter: blur(4px) grayscale(1);
       transition: opacity .75s ease, visibility .75s ease, transform .75s ease;
     }
 
     .language-gate.is-hidden {
       opacity: 0;
       visibility: hidden;
-      transform: scale(1.03);
+      transform: scale(1.01);
       pointer-events: none;
     }
 
     .gate-stage {
       position: relative;
-      width: min(100%, 430px);
-      min-height: 520px;
+      width: 100%;
+      min-height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-    }
-
-    .gate-kicker {
-      margin: 0 0 24px;
-      font-size: 32px;
-      font-weight: 650;
-      letter-spacing: 0;
-    }
-
-    .gate-title {
-      position: relative;
-      z-index: 1;
-      margin: 0;
-      color: #111;
-      font-size: clamp(86px, 27vw, 146px);
-      line-height: .72;
-      font-weight: 950;
-      letter-spacing: 0;
-      text-align: center;
-      filter: blur(.2px);
-    }
-
-    .gate-title::after {
-      content: "DULLE";
-      position: absolute;
-      left: 50%;
-      top: 48%;
-      transform: translateX(-50%);
-      color: rgba(0, 0, 0, .42);
-      filter: blur(13px);
-      z-index: -1;
     }
 
     .gate-glass {
-      position: absolute;
-      z-index: 2;
-      left: 0;
-      right: 0;
-      bottom: 38px;
-      min-height: 190px;
-      padding: 38px 22px 24px;
-      border: 1px solid rgba(255, 255, 255, .44);
-      border-radius: 30px 30px 8px 8px;
-      background: rgba(160, 160, 160, .66);
-      box-shadow: 0 -22px 44px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .28);
-      backdrop-filter: blur(19px) saturate(80%);
-      text-align: center;
+      width: min(100%, 330px);
+      padding: 18px 12px;
+      border-radius: 28px;
+      background: rgba(214, 214, 214, .68);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
+      backdrop-filter: blur(18px) saturate(70%);
+      transition: transform .45s ease, width .45s ease, padding .45s ease;
     }
 
-    .gate-subtitle {
-      margin: 0 0 18px;
-      color: rgba(0, 0, 0, .78);
-      font-size: 18px;
-      font-weight: 750;
+    .language-gate.is-open .gate-stage {
+      justify-content: flex-start;
+      padding-top: 74px;
+    }
+
+    .language-gate.is-open .gate-glass {
+      width: min(100%, 330px);
+      padding: 18px 12px 14px;
+    }
+
+    .language-trigger {
+      width: 100%;
+      min-height: 74px;
+      display: grid;
+      grid-template-columns: auto auto;
+      place-content: center;
+      align-items: center;
+      gap: 12px;
+      border: 0;
+      border-radius: 28px;
+      background: rgba(242, 242, 242, .82);
+      color: #030303;
+      font: inherit;
+      font-size: clamp(36px, 10vw, 46px);
+      font-weight: 900;
+      letter-spacing: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .language-trigger-icon {
+      width: .86em;
+      height: .86em;
     }
 
     .language-actions {
       display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 10px;
+      max-height: 0;
+      margin-top: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height .55s ease, opacity .35s ease, margin-top .35s ease;
+    }
+
+    .language-gate.is-open .language-actions {
+      max-height: min(68vh, 660px);
+      margin-top: 18px;
+      overflow-y: auto;
+      opacity: 1;
+      scrollbar-width: none;
+    }
+
+    .language-gate.is-open .language-actions::-webkit-scrollbar {
+      display: none;
     }
 
     .language-button {
+      width: 100%;
       min-height: 48px;
-      border: 1px solid rgba(0, 0, 0, .2);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .72);
+      padding: 0 18px;
+      border: 0;
+      border-radius: 19px;
+      background: rgba(248, 248, 248, .9);
       color: #111;
       font: inherit;
-      font-size: 14px;
-      font-weight: 900;
+      font-size: 18px;
+      font-weight: 850;
+      text-align: left;
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
@@ -573,6 +585,16 @@
       outline: none;
       background: #111;
       color: #fff;
+    }
+
+    .language-button.is-disabled {
+      opacity: .42;
+      cursor: default;
+    }
+
+    .language-button.is-disabled:hover {
+      background: rgba(248, 248, 248, .9);
+      color: #111;
     }
 
     .gate-loader {
@@ -602,9 +624,9 @@
     }
 
     .app.is-loading {
-      opacity: 0;
-      filter: blur(14px) grayscale(1);
-      transform: translateY(16px);
+      opacity: 1;
+      filter: blur(16px) grayscale(1);
+      transform: scale(1.015);
       pointer-events: none;
     }
 
@@ -627,13 +649,29 @@
 <body class="is-locked">
   <section class="language-gate" aria-label="언어 선택 화면">
     <div class="gate-stage">
-      <p class="gate-kicker">Seoul Trail</p>
-      <h2 class="gate-title">DULLE<br>GIL</h2>
       <div class="gate-glass">
-        <p class="gate-subtitle">Choose your language</p>
-        <div class="language-actions" aria-label="Language options">
-          <button type="button" class="language-button" data-lang="ko">한국어</button>
-          <button type="button" class="language-button" data-lang="en">English</button>
+        <button type="button" class="language-trigger" aria-expanded="false" aria-controls="language-options">
+          <svg class="language-trigger-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.2"></circle>
+            <path d="M3.6 9h16.8M3.6 15h16.8M12 3c2.2 2.5 3.3 5.5 3.3 9s-1.1 6.5-3.3 9M12 3C9.8 5.5 8.7 8.5 8.7 12s1.1 6.5 3.3 9" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+          </svg>
+          <span>language?</span>
+        </button>
+        <div class="language-actions" id="language-options" aria-label="Language options">
+          <button type="button" class="language-button" data-lang="ko">대한민국 - 한국어</button>
+          <button type="button" class="language-button" data-lang="en">United States - English</button>
+          <button type="button" class="language-button is-disabled" disabled>日本 - 日本語</button>
+          <button type="button" class="language-button is-disabled" disabled>中国 - 简体中文</button>
+          <button type="button" class="language-button is-disabled" disabled>台灣 - 繁體中文</button>
+          <button type="button" class="language-button is-disabled" disabled>España - Español</button>
+          <button type="button" class="language-button is-disabled" disabled>France - Français</button>
+          <button type="button" class="language-button is-disabled" disabled>Deutschland - Deutsch</button>
+          <button type="button" class="language-button is-disabled" disabled>Россия - Русский</button>
+          <button type="button" class="language-button is-disabled" disabled>Portugal - Português</button>
+          <button type="button" class="language-button is-disabled" disabled>Italia - Italiano</button>
+          <button type="button" class="language-button is-disabled" disabled>Việt Nam - Tiếng Việt</button>
+          <button type="button" class="language-button is-disabled" disabled>ประเทศไทย - ภาษาไทย</button>
+          <button type="button" class="language-button is-disabled" disabled>Indonesia - Bahasa Indonesia</button>
         </div>
         <div class="gate-loader" aria-hidden="true"><span></span></div>
       </div>
