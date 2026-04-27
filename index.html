@@ -471,9 +471,10 @@
       place-items: center;
       width: min(100%, 480px);
       margin: 0 auto;
-      padding: 42px 34px;
-      background: transparent;
+      padding: 44px 24px;
+      background: rgba(164, 164, 164, .82);
       color: #151515;
+      backdrop-filter: blur(4px) grayscale(1);
       transition: opacity .75s ease, visibility .75s ease, transform .75s ease;
     }
 
@@ -495,28 +496,28 @@
     }
 
     .gate-glass {
-      width: 100%;
-      min-height: min(100%, 790px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 30px 22px;
-      border-radius: 38px;
-      background: rgba(166, 166, 166, .86);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14);
-      backdrop-filter: blur(16px) grayscale(1) saturate(70%);
-      transition: justify-content .45s ease, padding .45s ease, background .45s ease;
+      width: min(100%, 410px);
+      padding: 28px 20px 48px;
+      border-radius: 34px;
+      background: rgba(174, 174, 174, .72);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2);
+      backdrop-filter: blur(18px) saturate(70%);
+      transition: transform .45s ease, width .45s ease, padding .45s ease;
+    }
+
+    .language-gate.is-open .gate-stage {
+      justify-content: flex-start;
+      padding-top: 74px;
     }
 
     .language-gate.is-open .gate-glass {
-      justify-content: flex-start;
-      padding-top: 48px;
-      padding-bottom: 24px;
+      width: min(100%, 410px);
+      padding: 28px 20px 18px;
     }
 
     .language-trigger {
       width: 100%;
-      min-height: 86px;
+      min-height: 74px;
       display: grid;
       grid-template-columns: auto auto;
       place-content: center;
@@ -527,19 +528,12 @@
       background: rgba(242, 242, 242, .82);
       color: #030303;
       font: inherit;
-      font-size: clamp(33px, 9.3vw, 44px);
+      font-size: clamp(36px, 10vw, 46px);
       font-weight: 900;
       letter-spacing: 0;
       cursor: pointer;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-      transition: min-height .45s ease, font-size .45s ease, border-radius .45s ease, transform .45s ease;
-    }
-
-    .language-gate.is-open .language-trigger {
-      min-height: 82px;
-      border-radius: 28px;
-      font-size: clamp(32px, 8.9vw, 42px);
     }
 
     .language-trigger-icon {
@@ -558,8 +552,8 @@
     }
 
     .language-gate.is-open .language-actions {
-      max-height: min(66vh, 650px);
-      margin-top: 22px;
+      max-height: min(68vh, 660px);
+      margin-top: 18px;
       overflow-y: auto;
       opacity: 1;
       scrollbar-width: none;
@@ -651,24 +645,6 @@
       .bottom-nav { bottom: 24px; }
     }
 
-    @media (max-height: 720px) {
-      .language-gate {
-        padding: 28px 30px;
-      }
-
-      .gate-glass {
-        min-height: 100%;
-        border-radius: 32px;
-      }
-
-      .language-gate.is-open .gate-glass {
-        padding-top: 26px;
-      }
-
-      .language-gate.is-open .language-actions {
-        max-height: 58vh;
-      }
-    }
   </style>
 </head>
 <body class="is-locked">
